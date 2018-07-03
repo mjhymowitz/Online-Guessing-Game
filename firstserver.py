@@ -19,12 +19,8 @@ def update():
         response = answer(-1)
     elif 'reset' in request.json['name']:                #if player reset scoreboard
         response = answer(-2)
-    else:                                        #if player guess incorrectly
+    else:                                                #if player guess number
         response = answer(int(request.json['num']))
-    print('win:',win)
-    print('loss:',loss)
-    print('mistakes:',mistakes)
-    print('response:',response)
     data = {'response':response, 'win':win, 'loss':loss, 'mistakes':mistakes}
     return jsonify(data)
 
@@ -62,7 +58,6 @@ def answer(num):
         else:
             responce = 0
             mistakes += 1
-    print(randnum)
     return responce
 
 if __name__ == '__main__':
