@@ -28,25 +28,9 @@ def update():
     data = {'response':response, 'win':win, 'loss':loss, 'mistakes':mistakes}
     return jsonify(data)
 
-@app.route("/",  methods = ['GET', 'POST'])
+@app.route("/",  methods = ['GET'])
 def hello():
-    global win
-    global loss
-    global mistakes
-    if request.method == 'POST':
-        response = 0
-        if 'quit' in request.form:                   #if player quit
-            response = answer(-1)
-        elif 'reset' in request.form:                #if player reset scoreboard
-            response = answer(-2)
-        else:                                        #if player guess incorrectly
-            if request.form.get('num'):
-                response = answer(int(request.form.get('num')))
-            else:
-                response = answer(0)
-        return render_template('home.html', response=response, win=win, loss=loss, mistakes=mistakes)
-    else:
-        return render_template('home.html', response=3, win=0, loss=0, mistakes=0)
+    return render_template('home.html')
     
 def answer(num):
     global not_generated
