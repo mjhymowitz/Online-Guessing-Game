@@ -1,2 +1,4 @@
 Flask==1.0.2
-jinja2==2.10
+jinja2==2.10.x
+Werkzeug==0.14.x
+wsgiref==1.1.5
