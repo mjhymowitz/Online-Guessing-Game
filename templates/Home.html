@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Marks Webpage</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    </head>
+    <script>
+        function correct(){
+            var num = document.getElementById('num')
+            console.log(num.value)
+            if((num.value) != '' || Number.isInteger(num.value)){
+                update('game',num.value);
+            }
+        }
+        function update(name, number) {
+            var data = {'name':name, 'num':number};
+            console.log(data); 
+            req = fetch('http://localhost:5000/update', {
+            // url:'http://localhost:5000/update',
+                method: 'POST', 
+                body: JSON.stringify(data),
+                headers:{'Content-Type': 'application/json'}
+            }).then(val => val.json())
+            .catch(function(err){
+                console.log(err);
+                console.log("Fail");
+                return err;
+            }).then(function(result) {
+                console.log(result); 
+                document.getElementById('win').innerHTML = result['win'];
+                document.getElementById('loss').innerHTML = result['loss'];
+                document.getElementById('mistakes').innerHTML = result['mistakes'];
+                if(result['response'] == 0){
+                    document.getElementById('response').innerHTML = "You guessed incorrectly.Try again.";
+                }else if(result['response'] == 1){
+                    document.getElementById('response').innerHTML = "You got lucky.";
+                }else if(result['response'] == 2){
+                    document.getElementById('response').innerHTML = "Quiter's never win at life.";
+                }else{
+                    document.getElementById('response').innerHTML = "Welcome New Player";
+                }
+            }); 
+        }
+    </script>
+    <body>
+        <div class = "Home">
+            <h1>Welcome to the Guessing Game of Chaos</h1>
+            <p>Have fun and dont give up too soon.</p>
+            Guess a number between 1 and 100.<input type='number' id='num'/>
+            <button type="submit" onclick="correct()">Submit</button>
+            <table>
+                <tr>
+                    <td><button type="submit" onclick="update('quit',0)">Quit</button></td>
+                    <td><button type="submit" onclick="update('reset',0)">Reset</button></td>
+                </tr>
+            </table>
+            <table  border="1">
+                <tr>
+                    <th>Wins</th>
+                    <th>Quits</th>
+                    <th>Mistakes</th>
+                </tr>
+                <tr>
+                    <td id='win'>0</td>
+                    <td id='loss'>0</td>
+                    <td id='mistakes'>0</td>
+                </tr>
+            </table>
+            <p id='response'>Welcome New Player</p>
+        </div>
+    </body>
+</html>
