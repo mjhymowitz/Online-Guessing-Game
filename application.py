@@ -4,19 +4,11 @@ import os
 
 app = Flask(__name__)
 
-win = 0
-loss = 0
-mistakes = 0
-randnum = 0
 not_generated = True
-data = {}
 
 @app.route('/update', methods=['POST'])
 def update():
-    get_score()
-    global win
-    global loss
-    global mistakes
+    set_sessions()
     response = 0
     if 'quit' in request.json['name']:                   #if player quit
         response = answer(-1)
@@ -24,8 +16,7 @@ def update():
         response = answer(-2)
     else:                                                #if player guess number
         response = answer(int(request.json['num']))
-    data = {'response':response, 'win':win, 'loss':loss, 'mistakes':mistakes}
-    set_score()
+    data = {'response':response, 'win':session['win'], 'loss':session['loss'], 'mistakes':session['mistakes']}
     return jsonify(data)
 
 @app.route("/",  methods = ['GET'])
@@ -34,57 +25,42 @@ def hello():
     
 def answer(num):
     global not_generated
-    global randnum
-    global win
-    global loss
-    global mistakes
     breaker = -1
     reset = -2
     responce = 0 
     if not_generated:
-        randnum = random.randint(1,100)
+        session['randnum'] = random.randint(1,100)
         not_generated = False
     if num == breaker:
-        randnum = random.randint(1,100)
+        session['randnum'] = random.randint(1,100)
         responce = 2
-        mistakes = 0
-        loss += 1
+        session['mistakes'] = 0
+        session['loss'] += 1
     elif num == reset:
-        win = 0
-        loss = 0
-        mistakes = 0
+        session['win'] = 0
+        session['loss'] = 0
+        session['mistakes'] = 0
         responce = 3
     else:
-        if num == randnum:
+        if num == session['randnum']:
             responce = 1
-            win += 1
-            randnum = random.randint(1,100)
-        elif num > randnum:
+            session['win'] += 1
+            session['randnum'] = random.randint(1,100)
+        elif num > session['randnum']:
             responce = 0
-            mistakes += 1
+            session['mistakes'] += 1
         else:
             responce = 4
-            mistakes += 1
+            session['mistakes'] += 1
     return responce
 
-def get_score():
-    global win
-    global loss
-    global mistakes
-    global data
-    ip = request.remote_addr
-    if ip in data:
-        win = data[ip]['win']
-        loss = data[ip]['loss']
-        mistakes = data[ip]['mistakes']
-    else:
-        data = {ip:{'win':0,'loss':0,'mistakes':0}}
-
-def set_score():
-    global data
-    data[ip]['win'] = win
-    data[ip]['loss'] = loss
-    data[ip]['mistakes'] = mistakes
+def set_sessions():
+    if session.get('randnum' is None):
+        session['win'] = 0
+        session['loss'] = 0
+        session['mistakes'] = 0
+        session['randnum'] = 0
+        
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
