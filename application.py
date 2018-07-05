@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_responce,
 import random
 import os
 
@@ -9,9 +9,11 @@ loss = 0
 mistakes = 0
 randnum = 0
 not_generated = True
+data = {}
 
 @app.route('/update', methods=['POST'])
 def update():
+    get_score()
     global win
     global loss
     global mistakes
@@ -23,6 +25,7 @@ def update():
     else:                                                #if player guess number
         response = answer(int(request.json['num']))
     data = {'response':response, 'win':win, 'loss':loss, 'mistakes':mistakes}
+    set_score()
     return jsonify(data)
 
 @app.route("/",  methods = ['GET'])
@@ -63,6 +66,23 @@ def answer(num):
             responce = 4
             mistakes += 1
     return responce
+
+def get_score():
+    global win
+    global loss
+    global mistakes
+    ip = request.remote_addr
+    if ip is in data:
+        win = data[ip]['win']
+        loss = data[ip]['loss']
+        mistakes = data[ip]['mistakes']
+    else:
+        data = {ip:{'win':0,'loss':0,'mistakes':0}}
+
+def set_score():
+    data[ip]['win'] = win
+    data[ip]['loss'] = loss
+    data[ip]['mistakes'] = mistakes
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
