@@ -5,8 +5,6 @@ import os
 app = Flask(__name__)
 app.secret_key = 'super secret key'
 
-not_generated = True
-
 @app.route('/update', methods=['POST'])
 def update():
     response = 0
@@ -25,13 +23,8 @@ def hello():
     return render_template('home.html')
     
 def answer(num):
-    global not_generated
     breaker = -1
     reset = -2
-    responce = 0 
-    if not_generated:
-        session['randnum'] = random.randint(1,100)
-        not_generated = False
     if num == breaker:
         session['randnum'] = random.randint(1,100)
         responce = 2
@@ -59,12 +52,11 @@ def answer(num):
     return responce
 
 def session_start():
-    # if not 'randnum' in session:
     if 'mistakes' not in session:
         session['win'] = 0
         session['loss'] = 0
         session['mistakes'] = 0
-        session['randnum'] = 0
+        session['randnum'] = random.randint(1,100)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
