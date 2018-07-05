@@ -18,7 +18,8 @@
             req = fetch('/update', {
                 method: 'POST', 
                 body: JSON.stringify(data),
-                headers:{'Content-Type': 'application/json'}
+                headers:{'Content-Type': 'application/json'},
+                credentials: 'include'
             }).then(val => val.json())
             .catch(function(err){
                 console.log(err);

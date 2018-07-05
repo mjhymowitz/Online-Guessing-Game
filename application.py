@@ -3,7 +3,7 @@ import random
 import os
 
 app = Flask(__name__)
-app.secret_key = 'super secret key'
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 not_generated = True
 
@@ -16,11 +16,19 @@ def update():
         response = answer(-2)
     else:                                                #if player guess number
         response = answer(int(request.json['num']))
+        print(session)
     data = {'response':response, 'win':session['win'], 'loss':session['loss'], 'mistakes':session['mistakes']}
     return jsonify(data)
 
 @app.route("/",  methods = ['GET'])
 def hello():
+    # if not 'randnum' in session:
+    session['win'] = 0
+    session['loss'] = 0
+    session['mistakes'] = 0
+    session['randnum'] = 0
+    if 'mistakes' in session:
+        print(session)
     return render_template('home.html')
     
 def answer(num):
@@ -51,14 +59,14 @@ def answer(num):
             session['mistakes'] += 1
         else:
             responce = 4
-            session['mistakes'] += 1
+            if 'mistakes' in session:
+                session['mistakes'] += 1
+            else:
+                print('Not here')
+                session['mistakes'] = 1
     return responce
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-    if session.has_key('randnum'):
-        session['win'] = 0
-        session['loss'] = 0
-        session['mistakes'] = 0
-        session['randnum'] = 0
+    app.run(host='0.0.0.0', port=port, debug=True)
+
