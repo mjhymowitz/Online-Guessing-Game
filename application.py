@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, jsonify, session
+from flask.ext.session import Session
 import random
 import os
 
 app = Flask(__name__)
-app.secret_key = 'super secret key'
+sess = Session()
 
+app.secret_key = 'super secret key'
+SESSION_TYPE = 'redis'
 not_generated = True
 
 @app.route('/update', methods=['POST'])
@@ -54,18 +57,11 @@ def answer(num):
             session['mistakes'] += 1
     return responce
 
-def set_sessions():
-    if session.get('randnum' is None):
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+    if session.get('randnum') is None:
         session['win'] = 0
         session['loss'] = 0
         session['mistakes'] = 0
         session['randnum'] = 0
-        
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.config['win'] = 0
-    app.config['loss'] = 0
-    app.config['mistakes'] = 0
-    app.config['randnum'] = 0
-    app.run(host='0.0.0.0', port=port)
