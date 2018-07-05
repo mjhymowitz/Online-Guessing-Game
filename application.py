@@ -3,13 +3,14 @@ import random
 import os
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = 'super secret key'
 
 not_generated = True
 
 @app.route('/update', methods=['POST'])
 def update():
     response = 0
+    session_start()
     if 'quit' in request.json['name']:                   #if player quit
         response = answer(-1)
     elif 'reset' in request.json['name']:                #if player reset scoreboard
@@ -21,12 +22,6 @@ def update():
 
 @app.route("/",  methods = ['GET'])
 def hello():
-    # if not 'randnum' in session:
-    if 'mistakes' in session:
-        session['win'] = 0
-        session['loss'] = 0
-        session['mistakes'] = 0
-        session['randnum'] = 0
     return render_template('home.html')
     
 def answer(num):
@@ -62,6 +57,14 @@ def answer(num):
             else:
                 session['mistakes'] = 1
     return responce
+
+def session_start():
+    # if not 'randnum' in session:
+    if 'mistakes' not in session:
+        session['win'] = 0
+        session['loss'] = 0
+        session['mistakes'] = 0
+        session['randnum'] = 0
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
