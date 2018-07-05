@@ -56,8 +56,11 @@ def answer(num):
             responce = 1
             win += 1
             randnum = random.randint(1,100)
-        else:
+        elif num > randnum:
             responce = 0
+            mistakes += 1
+        else:
+            responce = 4
             mistakes += 1
     return responce
 

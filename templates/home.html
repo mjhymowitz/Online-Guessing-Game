@@ -30,11 +30,13 @@
                 document.getElementById('loss').innerHTML = result['loss'];
                 document.getElementById('mistakes').innerHTML = result['mistakes'];
                 if(result['response'] == 0){
-                    document.getElementById('response').innerHTML = "You guessed incorrectly.Try again.";
+                    document.getElementById('response').innerHTML = "Wrong Answer. You guessed too high.";
                 }else if(result['response'] == 1){
                     document.getElementById('response').innerHTML = "You got lucky.";
                 }else if(result['response'] == 2){
                     document.getElementById('response').innerHTML = "Quiter's never win at life.";
+                }else if(result['response'] == 4){
+                    document.getElementById('response').innerHTML = "Wrong Answer. You guessed too low.";
                 }else{
                     document.getElementById('response').innerHTML = "Welcome New Player";
                 }
