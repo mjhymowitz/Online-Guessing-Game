@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, make_responce
+from flask import Flask, render_template, request, jsonify, session
 import random
 import os
 
@@ -71,6 +71,7 @@ def get_score():
     global win
     global loss
     global mistakes
+    global data
     ip = request.remote_addr
     if ip in data:
         win = data[ip]['win']
@@ -80,6 +81,7 @@ def get_score():
         data = {ip:{'win':0,'loss':0,'mistakes':0}}
 
 def set_score():
+    global data
     data[ip]['win'] = win
     data[ip]['loss'] = loss
     data[ip]['mistakes'] = mistakes
