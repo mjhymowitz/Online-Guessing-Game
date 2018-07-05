@@ -58,7 +58,7 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
     if session.get('randnum') is None:
-        session.get('win') = 0
-        session.get('loss') = 0
-        session.get('mistakes') = 0
-        session.get('randnum') = 0
+        session['win'] = 0
+        session['loss'] = 0
+        session['mistakes'] = 0
+        session['randnum'] = 0
