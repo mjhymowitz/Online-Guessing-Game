@@ -3,12 +3,12 @@ import random
 import os
 
 app = Flask(__name__)
+app.secret_key = 'super secret key'
 
 not_generated = True
 
 @app.route('/update', methods=['POST'])
 def update():
-    set_sessions()
     response = 0
     if 'quit' in request.json['name']:                   #if player quit
         response = answer(-1)
@@ -64,4 +64,8 @@ def set_sessions():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+    app.config['win'] = 0
+    app.config['loss'] = 0
+    app.config['mistakes'] = 0
+    app.config['randnum'] = 0
     app.run(host='0.0.0.0', port=port)
