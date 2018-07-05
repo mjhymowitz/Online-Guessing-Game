@@ -72,7 +72,7 @@ def get_score():
     global loss
     global mistakes
     ip = request.remote_addr
-    if ip is in data:
+    if ip in data:
         win = data[ip]['win']
         loss = data[ip]['loss']
         mistakes = data[ip]['mistakes']
