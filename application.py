@@ -1,13 +1,11 @@
 from flask import Flask, render_template, request, jsonify, session
-from flask.ext.session import Session
 import random
 import os
 
 app = Flask(__name__)
-sess = Session()
 
 app.secret_key = 'super secret key'
-SESSION_TYPE = 'redis'
+
 not_generated = True
 
 @app.route('/update', methods=['POST'])
