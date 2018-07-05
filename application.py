@@ -16,19 +16,17 @@ def update():
         response = answer(-2)
     else:                                                #if player guess number
         response = answer(int(request.json['num']))
-        print(session)
     data = {'response':response, 'win':session['win'], 'loss':session['loss'], 'mistakes':session['mistakes']}
     return jsonify(data)
 
 @app.route("/",  methods = ['GET'])
 def hello():
     # if not 'randnum' in session:
-    session['win'] = 0
-    session['loss'] = 0
-    session['mistakes'] = 0
-    session['randnum'] = 0
     if 'mistakes' in session:
-        print(session)
+        session['win'] = 0
+        session['loss'] = 0
+        session['mistakes'] = 0
+        session['randnum'] = 0
     return render_template('home.html')
     
 def answer(num):
@@ -62,7 +60,6 @@ def answer(num):
             if 'mistakes' in session:
                 session['mistakes'] += 1
             else:
-                print('Not here')
                 session['mistakes'] = 1
     return responce
 
